@@ -1,5 +1,6 @@
 package com.example.serverClient.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,10 +18,16 @@ public class ClientTestController {
         return new RestTemplate();
     }
 
+    @HystrixCommand(fallbackMethod = "getFailure")
     @RequestMapping("/getTestMsg")
     public String getTestMsg(){
         RestTemplate rt = getRestTemplate();
         String result = rt.getForObject("http://ServerProvide/ServerTest", String.class);
         return result;
+    }
+
+    public String getFailure() {
+        String Msg = "网络繁忙，请稍后再试。（这里是服务调用者的快速失败给出的提示）";
+        return Msg;
     }
 }
