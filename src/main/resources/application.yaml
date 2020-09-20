@@ -4,6 +4,18 @@ server:
 spring:
   application:
     name: ServerClient
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+  cloud:
+    stream:
+      bindings:
+        input:
+          destination: wuyuchannel
+        output:
+          destination: wuyuexchannel
 eureka:
   client:
     service-url:
